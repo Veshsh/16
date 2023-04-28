@@ -28,9 +28,10 @@ namespace _5NET.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    if (Validate.MessageValidate(Message))
+                    if (Message == "/disconnect")
+                        Application.Current.Shutdown();
+                    else if (Validate.MessageValidate(Message))
                         _ = TcpClient.SendMessage(Message);
-                    
                 });
             }
         }
