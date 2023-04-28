@@ -43,8 +43,7 @@ namespace _5NET.Model
                 foreach (string log in Log)
                     MainViewModel1.Log.Add(log);
                 foreach (Socket item in clients)
-                    _ = SendMessage(item, message);
-                
+                    _ = SendMessage(item, message); 
             }
         }
         private static async Task SendMessage(Socket client,string message)
@@ -79,8 +78,13 @@ namespace _5NET.Model
                 byte[] bytes = new byte[1024];
                 await server.ReceiveAsync(bytes, SocketFlags.None);
                 string message = Encoding.UTF8.GetString(bytes);
-                MainViewModel1.MessageStory.Add(message);
-                names.Add(message.Split(": ")[1]);
+                if (message.Split(": ")[2] == "/disconnect")
+                    names.Remove(message.Split(": ")[1]);
+                else
+                {
+                    names.Add(message.Split(": ")[1]);
+                    MainViewModel1.MessageStory.Add(message);
+                }
                 MainViewModel1.Clients.Clear();
                 foreach (string name in names)
                     MainViewModel1.Clients.Add(name); 
@@ -93,7 +97,7 @@ namespace _5NET.Model
         }
         private static string MessageFormat(string message)
         {
-            return DateTime.Now+": "+name+": "+message;
+            return DateTime.Now+": "+name+": "+message+": ";
         }
     }
 

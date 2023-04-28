@@ -29,6 +29,7 @@ namespace _5NET.ViewModel
                         TcpServer.ServerStart(Enter);
                         TcpClient.ClientStart(Enter);
                         Window1 window1 = new Window1();
+                        _ = TcpClient.SendMessage(Enter.Name + " CreateChat");
                         window1.ShowDialog();
                     }
                 });
@@ -45,7 +46,9 @@ namespace _5NET.ViewModel
                         MainViewModel1.span = 2;
                         TcpClient.ClientStart(Enter);
                         Window1 window1 = new Window1();
+                        _ = TcpClient.SendMessage(Enter.Name + " ConnectChat");
                         window1.ShowDialog();
+                        _ = TcpClient.SendMessage("/disconnect");
                     }
                 });
             }
