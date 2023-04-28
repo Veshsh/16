@@ -16,19 +16,18 @@ namespace _5NET.ViewModel
     internal class MainViewModel : BindingHelper
     {
         #region 
-        public string Ip { get; set; }
-        public string Name { get; set; }
-        public int Height { get; set; }
-        public int Width { get; set; }
+        public EnterModel Enter { get; set; } = new EnterModel("127.0.0.1:8888", "noname");
         public DelegateCommand NP 
         {
             get 
             {
                 return new DelegateCommand(() =>
                 {
-                    if (Validate.EnterValidate(Ip, Name))
+                    if (Validate.EnterValidate(Enter))
                     {
-                        MetodLogic.NewChat(new EnterModel(Ip, Name));
+                        MainViewModel1.span = 1;
+                        TcpServer.ServerStart(Enter);
+                        TcpClient.ClientStart(Enter);
                         Window1 window1 = new Window1();
                         window1.ShowDialog();
                     }
@@ -41,9 +40,10 @@ namespace _5NET.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    if (Validate.EnterValidate(Ip, Name))
+                    if (Validate.EnterValidate(Enter))
                     {
-                        MetodLogic.ConectChat(new EnterModel(Ip, Name));
+                        MainViewModel1.span = 2;
+                        TcpClient.ClientStart(Enter);
                         Window1 window1 = new Window1();
                         window1.ShowDialog();
                     }
@@ -54,10 +54,7 @@ namespace _5NET.ViewModel
 
         public MainViewModel()
         {
-            Ip = "127.0.0.1:8888";
-            Name = "noname";
-            Height = 450;
-            Width = 800;
+
         }
     }
 }

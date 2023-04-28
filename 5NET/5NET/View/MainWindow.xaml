@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_5NET"
         mc:Ignorable="d"
-        Title="MainWindow" Width="{Binding Width,Mode=TwoWay}" Height="{Binding Height,Mode=TwoWay}" >
+        Title="MainWindow">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -15,8 +15,8 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBox Text="{Binding Name}"/>
-        <TextBox Grid.Column="1" Text="{Binding Ip}"/>
+        <TextBox Text="{Binding Enter.Name}"/>
+        <TextBox Grid.Column="1" Text="{Binding Enter.Ip}"/>
         <Button Content="Новый чат" Grid.Row="1" Command="{Binding Path=NP}"/>
         <Button Content="Присоеденится к чату" Grid.Column="1" Grid.Row="1" Command="{Binding Path=CP}"/>
     </Grid>

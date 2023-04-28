@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "N2bVFzfm+ICZZnfqdJ1E3Gt5YxNheHO+gzuiWwpW7bBVUvtv7NOsqSQWdRrMgWLQBgZ8udhWTcecZNj9Z6YrjQ==",
+  "dgSpecHash": "/eU8WtkFkVvwYohk3oJI7L5tb5+5pDrZxlGoa74L6tzymnKgoIgAOlpFw+XT+XxUZKnogba6XvuODgyc8FlYrQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\vanya\\source\\repos\\5NET\\5NET\\5NET.csproj",
+  "projectFilePath": "C:\\Users\\vanya\\source\\repos\\5NET\\5NET\\5NET\\5NET.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\vanya\\.nuget\\packages\\prism.core\\8.1.97\\prism.core.8.1.97.nupkg.sha512"
   ],

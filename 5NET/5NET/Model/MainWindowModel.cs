@@ -8,93 +8,96 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
-
 namespace _5NET.Model
 {
-    class MetodLogic
+    public static class TcpServer
     {
-        private static Socket socket;
-        private static List<Socket> Clients;
-        private static string username = "noname";
-        private static HashSet<string> set;
-        public static void NewChat(EnterModel enterModel)
+        private static Socket socket=new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private static List<Socket> clients = new List<Socket>();
+        private static HashSet<string> Log=new HashSet<string>();
+        public static void ServerStart(EnterModel enter)
         {
-            Defolt();
-            username = enterModel.Name;
-            MainViewModel1.MessageStory.Add(MessageFormat(username + " Create Chat"));
-            IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(enterModel.Ip.Split(':')[0]), Convert.ToInt32(enterModel.Ip.Split(':')[1]));
-            socket.Bind(ipPoint);
-            socket.Listen(10);
-            _ = ListenToClients();
+            IPEndPoint iPPoint = new IPEndPoint(IPAddress.Parse(enter.Ip.Split(':')[0]), Convert.ToInt32(enter.Ip.Split(':')[1]));
+            socket.Bind(iPPoint);
+            socket.Listen(2);
+            _ = ListenToClient();
         }
-        public static void ConectChat(EnterModel enterModel)
+        private static async Task ListenToClient()
         {
-            Defolt();
-            username = enterModel.Name;
-            socket.ConnectAsync(enterModel.Ip.Split(':')[0], Convert.ToInt32(enterModel.Ip.Split(':')[1]));
-            _ = RecieveMessage();
-            SendMesage(username + " Include");
+            while (true)
+            {
+                Socket client = await socket.AcceptAsync();
+                clients.Add(client);
+                _ = RecieveMessage(client);
+            }
         }
-        private static void Defolt()
-        {
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Clients = new List<Socket>();
-            set = new HashSet<string>();
-        }
-        private static async Task RecieveMessage(Socket? sockete=null)//общий
+        private static async Task RecieveMessage(Socket client)
         {
             while (true)
             {
                 byte[] bytes = new byte[1024];
-                if (sockete is null)
-                    await socket.ReceiveAsync(bytes, SocketFlags.None);
-                else
-                    await sockete.ReceiveAsync(bytes, SocketFlags.None);
-                
+                await client.ReceiveAsync(bytes, SocketFlags.None);
                 string message = Encoding.UTF8.GetString(bytes);
-                    MainViewModel1.MessageStory.Add(MessageFormat(message));
-                if (!(sockete is null))
-                    foreach (var item in Clients)
-                        _ = SendMessage(message, item);               
+                Log.Add($"{client.RemoteEndPoint}");
+                MainViewModel1.Log.Clear();
+                foreach (string log in Log)
+                    MainViewModel1.Log.Add(log);
+                foreach (Socket item in clients)
+                    _ = SendMessage(item, message);
+                
             }
         }
-        private static async Task ListenToClients()//сервер
+        private static async Task SendMessage(Socket client,string message)
+        {
+            byte[] bytes =Encoding.UTF8.GetBytes(message);
+            await client.SendAsync(bytes,SocketFlags.None);
+        }
+    }
+    public static class TcpClient
+    {
+        private static string name="noname";
+        private static Socket server= new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private static HashSet<string> names = new HashSet<string>();
+        public static void ClientStart(EnterModel enter)
+        {
+            name = enter.Name;
+            try
+            {
+                server.ConnectAsync(enter.Ip.Split(':')[0], Convert.ToInt32(enter.Ip.Split(':')[1]));
+            }
+            catch 
+            {
+                MessageBox.Show("ERROR Program Shotdown Auto");
+                Application.Current.Shutdown();
+            }
+            _ = RecieveMessage();
+        }
+        private static async Task RecieveMessage()
         {
             while (true)
             {
-                var client=await socket.AcceptAsync();
-                Clients.Add(client);
-                _ = RecieveMessage(client);
+                byte[] bytes = new byte[1024];
+                await server.ReceiveAsync(bytes, SocketFlags.None);
+                string message = Encoding.UTF8.GetString(bytes);
+                MainViewModel1.MessageStory.Add(message);
+                names.Add(message.Split(": ")[1]);
+                MainViewModel1.Clients.Clear();
+                foreach (string name in names)
+                    MainViewModel1.Clients.Add(name); 
             }
         }
-        private static async Task SendMessage(string message, Socket? sockete=null)//общий
+        public static async Task SendMessage(string message)
         {
-            byte[] bytes = Encoding.UTF8.GetBytes(message);
-            if (sockete is null)
-                await socket.SendAsync(bytes, SocketFlags.None);
-            else
-                await sockete.SendAsync(bytes, SocketFlags.None);
-        }
-        public static void SendMesage(string message)
-        {
-            foreach (var item in Clients)
-                _ = SendMessage(message, item);
-            if (Clients.Count == 0)
-                _ = SendMessage(message);
-            else
-                MainViewModel1.MessageStory.Add(MessageFormat(message));
+            byte[] bytes = Encoding.UTF8.GetBytes(MessageFormat(message));
+            await server.SendAsync(bytes, SocketFlags.None);
         }
         private static string MessageFormat(string message)
         {
-
-            set.Add(username);
-            MainViewModel1.Clients.Clear();
-            foreach (var item in set)
-                MainViewModel1.Clients.Add(item);
-            return "("+DateTime.Now+"): " + username + ": " + message;
+            return DateTime.Now+": "+name+": "+message;
         }
     }
-    class EnterModel
+
+    public class EnterModel
     {
         public EnterModel(string Ip,string Name) {
             this.Name = Name;

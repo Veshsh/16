@@ -56,11 +56,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\vanya\\source\\repos\\5NET\\5NET\\5NET.csproj",
+      "projectUniqueName": "C:\\Users\\vanya\\source\\repos\\5NET\\5NET\\5NET\\5NET.csproj",
       "projectName": "5NET",
-      "projectPath": "C:\\Users\\vanya\\source\\repos\\5NET\\5NET\\5NET.csproj",
+      "projectPath": "C:\\Users\\vanya\\source\\repos\\5NET\\5NET\\5NET\\5NET.csproj",
       "packagesPath": "C:\\Users\\vanya\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\vanya\\source\\repos\\5NET\\5NET\\obj\\",
+      "outputPath": "C:\\Users\\vanya\\source\\repos\\5NET\\5NET\\5NET\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\vanya\\AppData\\Roaming\\NuGet\\NuGet.Config",

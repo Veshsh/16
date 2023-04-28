@@ -13,13 +13,15 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="10*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="5*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button Content="exit" Grid.Column="1" IsCancel="True" />
-        <ListBox Grid.Row="1" ItemsSource="{Binding MessageStory}"/>
-        <ListBox Grid.Column="1" Grid.Row="1"  ItemsSource="{Binding Clients}"/>
-        <TextBox Grid.Row="2" Text="{Binding Message}"/>
-        <Button Content="Send" Grid.Column="1" Grid.Row="2" Command="{Binding Path=Send}"/>
+        <Button Content="Выход" Grid.Column="1" IsCancel="True"/>
+        <ListBox Grid.Row="1" Grid.RowSpan="2" ItemsSource="{Binding MessageStory}"/>
+        <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Log}"/>
+        <ListBox Grid.Column="1" Grid.Row="1" Grid.RowSpan="{Binding span}"  ItemsSource="{Binding Clients}"/>
+        <TextBox Grid.Row="3" Text="{Binding Message}"/>
+        <Button Content="Send" Grid.Column="1" Grid.Row="3" Command="{Binding Path=Send}"/>
     </Grid>
 </Window>
